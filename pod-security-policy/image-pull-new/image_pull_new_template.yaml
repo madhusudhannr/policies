@@ -1,0 +1,28 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredregistrynew
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredRegistryNew
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          type: object
+          properties:
+            registry:
+              type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredregistrynew
+        violation[{"msg": msg, "details": {"Registry should be": required}}] {
+          input.review.object.kind == "Pod"
+          some i
+          image := input.review.object.spec.containers[i].image
+          required := input.parameters.registry
+          startswith(image,required)
+          msg := sprintf("Forbidden registry: %v", [image])
+        }

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: centos-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: simple-test
+    template:
+        metadata:
+            labels:
+                app: simple-test
+        spec:
+            containers:
+            - name: simple-test
+              image: bluedata/centos8:5.1.1
+              command: [ "sleep" ]
+              args: ["10000"]
