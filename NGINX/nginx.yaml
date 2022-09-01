@@ -1,13 +1,19 @@
-apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sRequiredRegistry
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: imagesmustcomefrom-docker
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: nginx-deployment
 spec:
-  match:
-    kinds:
-      - apiGroups: [""]
-        kinds: ["Pod"]
-  parameters:
-    registry: "gcr.io/"
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
