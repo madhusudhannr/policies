@@ -14,10 +14,10 @@ spec:
       labels:
         app: sc-nginx
     spec:
-      volumes:
-      - name: nfs-test
-        persistentVolumeClaim:
-          claimName: sc-nfs-pvc
+#      volumes:
+#      - name: nfs-test
+#        persistentVolumeClaim:
+#          claimName: sc-nfs-pvc
       containers:
       - image: nginx
         name: nginx
